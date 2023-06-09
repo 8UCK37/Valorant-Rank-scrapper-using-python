@@ -25,11 +25,13 @@ def extract_values_from_giant_stats(div):
     values = {}
     name_spans = div.find_all('span', class_='name')
     value_spans = div.find_all('span', class_='value')
-
-    for name_span, value_span in zip(name_spans, value_spans):
+    rank_spans =  div.find_all('span', class_='rank')
+    
+    for name_span, value_span,rank_spans in zip(name_spans, value_spans,rank_spans):
         name = name_span.text.strip()
         value = value_span.text.strip()
-        values[name] = value
+        attrRank = rank_spans.text.strip()
+        values[name] = {'value':value,'rank':attrRank}
     
     return values
 
@@ -39,7 +41,7 @@ def extract_giant_stats(giant_stats):
     for stat_div in stat_divs:
         values = extract_values_from_giant_stats(stat_div)
         player_data.update(values)
-
+        
 
 
 
@@ -77,4 +79,4 @@ for div in divs:
 
 giant_statsDiv = soup.find('div', class_='giant-stats')
 extract_giant_stats(giant_statsDiv)
-print(player_data)  
+print('data:\n',player_data)  
